@@ -5,6 +5,7 @@ import org.example.wepaybackend.models.Transaction;
 import org.example.wepaybackend.models.User;
 import org.example.wepaybackend.models.Wallet;
 import org.example.wepaybackend.repositories.WalletRepository;
+import org.example.wepaybackend.requests.BankToWalletTransferRequest;
 import org.example.wepaybackend.requests.TransactionRequest;
 import org.example.wepaybackend.services.WalletService;
 import org.springframework.http.HttpStatus;
@@ -48,17 +49,17 @@ public class WalletController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
+    @PostMapping("/addMoney/{uniqueId}/{amount}")
+    public ResponseEntity<Transaction> addAmountFromBankToWallet(@RequestBody BankToWalletTransferRequest request) throws Exception {
+        Transaction transaction = walletService.addMoney(request.getUserId(), request.getAmount());
+        return new ResponseEntity<>(transaction, HttpStatus.OK);
+    }
+
     @PutMapping("/deposit/{id}/{amount}")
     public ResponseEntity<Transaction> depositAmountFromWalletToBank(@PathVariable("id") String uniqueId, @PathVariable("amount") Double amount)
             throws UserNotException, InsufficientResourcesException, LoginException, InsufficientBalanceException {
         Transaction transaction = walletService.depositeAmount(uniqueId, amount);
         return new ResponseEntity<Transaction>(transaction, HttpStatus.OK);
-    }
-
-    @PostMapping("/addMoney/{uniqueId}/{amount}")
-    public ResponseEntity<User> addAmountFromBankToWallet(String uniqueId, Double amount) throws Exception {
-        User user = walletService.addMoney(uniqueId, amount);
-        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
 }

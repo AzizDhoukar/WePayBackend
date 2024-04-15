@@ -3,6 +3,7 @@ package org.example.wepaybackend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
+@Data
 public class Wallet {
 
     @Id
@@ -25,4 +27,7 @@ public class Wallet {
     @OneToMany
     @JsonIgnore
     private List<Transaction> transaction;
+
+    @OneToOne
+    private BankAccount bankAccount;
 }
