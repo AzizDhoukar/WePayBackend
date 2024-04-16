@@ -7,6 +7,7 @@ import org.example.wepaybackend.models.Wallet;
 import org.example.wepaybackend.repositories.WalletRepository;
 import org.example.wepaybackend.requests.BankToWalletTransferRequest;
 import org.example.wepaybackend.requests.TransactionRequest;
+import org.example.wepaybackend.services.UserService;
 import org.example.wepaybackend.services.WalletService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +25,10 @@ public class WalletController {
 
     private final UserService userServiceImpl;
 
-    private final CurrentUserSessionServiceImpl currentuserSesionServiceImpl;
-
-    public WalletController(WalletService walletService, WalletRepository walletRepository, UserService userServiceImpl, CurrentUserSessionServiceImpl currentuserSesionServiceImpl) {
+    public WalletController(WalletService walletService, WalletRepository walletRepository, UserService userServiceImpl) {
         this.walletService = walletService;
         this.walletRepository = walletRepository;
         this.userServiceImpl = userServiceImpl;
-        this.currentuserSesionServiceImpl = currentuserSesionServiceImpl;
     }
 
 
@@ -49,17 +47,10 @@ public class WalletController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    @PostMapping("/addMoney/{uniqueId}/{amount}")
+    @PostMapping("/addMoney")
     public ResponseEntity<Transaction> addAmountFromBankToWallet(@RequestBody BankToWalletTransferRequest request) throws Exception {
         Transaction transaction = walletService.addMoney(request.getUserId(), request.getAmount());
         return new ResponseEntity<>(transaction, HttpStatus.OK);
-    }
-
-    @PutMapping("/deposit/{id}/{amount}")
-    public ResponseEntity<Transaction> depositAmountFromWalletToBank(@PathVariable("id") String uniqueId, @PathVariable("amount") Double amount)
-            throws UserNotException, InsufficientResourcesException, LoginException, InsufficientBalanceException {
-        Transaction transaction = walletService.depositeAmount(uniqueId, amount);
-        return new ResponseEntity<Transaction>(transaction, HttpStatus.OK);
     }
 
 }
