@@ -9,7 +9,7 @@ import org.example.wepaybackend.paymentNew.models.User;
 import org.example.wepaybackend.paymentNew.models.Wallet;
 import org.example.wepaybackend.paymentNew.repositories.BankAccountRepository;
 import org.example.wepaybackend.paymentNew.repositories.TransactionRepository;
-import org.example.wepaybackend.paymentNew.repositories.UserRepository;
+import org.example.wepaybackend.paymentNew.repositories.UserRepositoryNew;
 import org.example.wepaybackend.paymentNew.repositories.WalletRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,26 +19,26 @@ import java.util.Optional;
 @Service
 public class WalletService {
     private final UserService userService;
-    private final UserRepository userRepository;
+    private final UserRepositoryNew userRepositoryNew;
     private final TransactionRepository transactionRepository;
     private final BankAccountRepository bankAccountRepository;
     private final WalletRepository walletRepository;
 
-    public WalletService(UserService userService, UserRepository userRepository, TransactionRepository transactionRepository, BankAccountRepository bankAccountRepository, WalletRepository walletRepository) {
+    public WalletService(UserService userService, UserRepositoryNew userRepositoryNew, TransactionRepository transactionRepository, BankAccountRepository bankAccountRepository, WalletRepository walletRepository) {
         this.userService = userService;
-        this.userRepository = userRepository;
+        this.userRepositoryNew = userRepositoryNew;
         this.transactionRepository = transactionRepository;
         this.bankAccountRepository = bankAccountRepository;
         this.walletRepository = walletRepository;
     }
 
     public Transaction fundTransfer(String sourceMobileNo, String targetMobileNo, Double amount, String uniqueId) throws UserNotFound{
-        Optional<User> user = userRepository.findByMobileNo(sourceMobileNo);
+        Optional<User> user = userRepositoryNew.findByMobileNo(sourceMobileNo);
         if (user.isEmpty()){ throw new UserNotFound("No user with the number:" + sourceMobileNo); }
         User customer = user.get();
         Wallet wallet = customer.getWallet();
 
-        Optional<User> targetUser = userRepository.findByMobileNo(sourceMobileNo);
+        Optional<User> targetUser = userRepositoryNew.findByMobileNo(sourceMobileNo);
         if (targetUser.isEmpty()){ throw new UserNotFound("No user with the number:" + sourceMobileNo); }
         User targetCustomer = targetUser.get();
 
@@ -54,7 +54,7 @@ public class WalletService {
     }
 
     public Transaction addMoney(Integer userId, Double amount) throws UserNotFound, InsufficientBalanceException, BankAccountNotFound {
-        Optional<User> customer = userRepository.findById(userId);
+        Optional<User> customer = userRepositoryNew.findById(userId);
         if (customer.isEmpty()){ throw new UserNotFound("No user with the id:" + userId); }
 
         User user = customer.get();
