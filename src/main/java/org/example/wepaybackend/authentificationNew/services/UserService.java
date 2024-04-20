@@ -1,4 +1,4 @@
-package org.example.wepaybackend.paymentNew.services;
+package org.example.wepaybackend.authentificationNew.services;
 
 import org.example.wepaybackend.authentificationNew.models.User;
 import org.example.wepaybackend.authentificationNew.repositoies.UserRepository;
@@ -22,5 +22,4 @@ public class UserService {
 
         return users;
     }
-
 }

@@ -1,5 +1,6 @@
 package org.example.wepaybackend.paymentNew.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.example.wepaybackend.paymentNew.Exeptions.WalletNotFound;
 import org.example.wepaybackend.paymentNew.models.Transaction;
 import org.example.wepaybackend.paymentNew.models.Wallet;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/wallet")
+@RequiredArgsConstructor
 public class WalletController {
 
     private final WalletService walletService;
@@ -23,12 +25,6 @@ public class WalletController {
     private final WalletRepository walletRepository;
 
     private final UserService userServiceImpl;
-
-    public WalletController(WalletService walletService, WalletRepository walletRepository, UserService userServiceImpl) {
-        this.walletService = walletService;
-        this.walletRepository = walletRepository;
-        this.userServiceImpl = userServiceImpl;
-    }
 
 
     @GetMapping("/{id}")
