@@ -6,7 +6,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.example.wepaybackend.appuser.models.data.AccountType;
 import org.example.wepaybackend.appuser.models.data.AppUserRole;
-import org.example.wepaybackend.token.Token;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,9 +38,6 @@ public class AppUser implements UserDetails {
     private Boolean locked;
     private Boolean enabled;
     private Double balance;
-
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
 
     public AppUser(String email,
                    String password,
