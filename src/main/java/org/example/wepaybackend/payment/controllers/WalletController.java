@@ -1,8 +1,10 @@
 package org.example.wepaybackend.payment.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.wepaybackend.payment.Exeptions.UserNotFound;
 import org.example.wepaybackend.payment.Exeptions.WalletNotFound;
 import org.example.wepaybackend.payment.models.Transaction;
+import org.example.wepaybackend.payment.models.User;
 import org.example.wepaybackend.payment.models.Wallet;
 import org.example.wepaybackend.payment.repositories.WalletRepository;
 import org.example.wepaybackend.payment.requests.AddWalletRequest;
@@ -25,26 +27,27 @@ public class WalletController {
     private final WalletService walletService;
 
     private final WalletRepository walletRepository;
+    @GetMapping()
+    public ResponseEntity<List<Wallet>> getAll() {
+        return ResponseEntity.ok(walletRepository.findAll());
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Wallet> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(walletRepository.findById(id).orElseThrow(WalletNotFound::new));
+    }
 
+    @PostMapping("/create")
+    public ResponseEntity<Wallet> createUser(@RequestBody Wallet wallet) {
+        return ResponseEntity.ok(walletRepository.save(wallet));
+    }
+    @PutMapping("update")
+    public ResponseEntity<Wallet> updateUser(@RequestBody Wallet wallet) {
+        return ResponseEntity.ok(walletRepository.save(wallet));
+    }
     @PostMapping
     public ResponseEntity<Wallet> add(@RequestBody AddWalletRequest request) {
         Wallet newWallet = walletService.addWallet(request);
         return ResponseEntity.ok(newWallet);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Wallet>> getAll(){
-        List<Wallet> wallets = walletRepository.findAll();
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Wallet> viewWallet(@PathVariable("id") Integer uniqueId) throws WalletNotFound {
-        Optional<Wallet> wallet = walletRepository.findById(uniqueId);
-        if (wallet.isEmpty()){
-            throw new WalletNotFound("No wallet with this id" + uniqueId);
-        }
-        return new ResponseEntity<>(wallet.get(), HttpStatus.OK);
     }
 
     @PutMapping("/transfer")

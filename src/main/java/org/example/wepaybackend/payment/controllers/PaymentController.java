@@ -38,8 +38,8 @@ public class PaymentController {
     public ResponseEntity<Transaction> createSplitPayment(@RequestBody SplitPaymentRequest request) {
         return ResponseEntity.ok(paymentService.createSplitPayment(request));
     }
-    @PostMapping("/executePayment")
-    public ResponseEntity<Transaction> executePayment(@RequestBody Integer id){
+    @PostMapping("/executePayment/{id}")
+    public ResponseEntity<Transaction> executePayment(@PathVariable Integer id){
         return ResponseEntity.ok(paymentService.executePayment(id));
     }
     @PostMapping("/emailTest")

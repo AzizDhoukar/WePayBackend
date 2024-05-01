@@ -24,4 +24,9 @@ public class User {
     @JsonIgnore
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     private Wallet wallet;
+
+    public User (@NotNull String mobileNo){
+        this.mobileNo = mobileNo;
+        this.wallet = new Wallet(1000.0, this);
+    }
 }

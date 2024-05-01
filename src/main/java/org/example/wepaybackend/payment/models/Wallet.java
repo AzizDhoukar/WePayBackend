@@ -29,4 +29,10 @@ public class Wallet {
     @OneToMany
     @JsonIgnore
     private List<Transaction> transaction;
+
+    public Wallet (Double balance, @NotNull User user){
+        this.balance = balance;
+        this.user = user;
+
+    }
 }
